@@ -217,16 +217,21 @@ API_AVAILABLE(ios(10.0)) {
         NSLog(@"do play sound now: %@", soundName);
         NSLog(@"loop sound: %@", loopSound);
         NSLog(@"volume sound: %@", volume);
+        SystemSoundID myAlertSound;
+        NSURL *url = [NSURL URLWithString:@"/System/Library/Audio/UISounds/alarm.caf"];
+        AudioServicesCreateSystemSoundID((__bridge CFURLRef)(url), &myAlertSound);
+        
+        AudioServicesPlaySystemSound(myAlertSound);
         
 //        AVAudioSession *session = [AVAudioSession sharedInstance];
 //        [session setCategory:AVAudioSessionCategoryPlayback
 //                 withOptions:AVAudioSessionCategoryOptionMixWithOthers
 //                       error:nil];
 //        [session setActive:true error:nil];
-        //[session setMode:AVAudioSessionModeDefault error:nil]; // optional
-        
+//        [session setMode:AVAudioSessionModeDefault error:nil]; // optional
+//
 //        NSError *playerError = nil;
-        
+//
 //        if([RnAlarmNotification checkStringIsNotEmpty:soundName]){
 //            NSLog(@"soundName: %@", soundName);
 //
@@ -269,6 +274,7 @@ API_AVAILABLE(ios(10.0)) {
 //                }
 //            }
 //        }
+//
     } @catch(NSException *exception){
         NSLog(@"%@", exception.reason);
     }
@@ -517,14 +523,14 @@ RCT_EXPORT_METHOD(scheduleAlarm: (NSDictionary *)details resolver:(RCTPromiseRes
                 @"snooze_interval": details[@"snooze_interval"]
             };
             
-            if([details[@"play_sound"] isEqualToNumber: [NSNumber numberWithInt: 1]]) {
-                BOOL notEmpty = [RnAlarmNotification checkStringIsNotEmpty:details[@"sound_name"]];
-                if(notEmpty != YES){
-                    content.sound = UNNotificationSound.defaultSound;
-                } else {
-                    content.sound = [UNNotificationSound soundNamed:details[@"sound_name"]];
-                }
-            }
+//            if([details[@"play_sound"] isEqualToNumber: [NSNumber numberWithInt: 1]]) {
+//                BOOL notEmpty = [RnAlarmNotification checkStringIsNotEmpty:details[@"sound_name"]];
+//                if(notEmpty != YES){
+//                    content.sound = UNNotificationSound.defaultSound;
+//                } else {
+//                    content.sound = [UNNotificationSound soundNamed:details[@"sound_name"]];
+//                }
+//            }
             
             // Create the request object.
             UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:alarmId content:content trigger:trigger];
